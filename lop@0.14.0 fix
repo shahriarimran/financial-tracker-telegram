@@ -1,0 +1,168 @@
+warning: in the working copy of 'legacy/python-bot/financial_alert_bot.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'legacy/python-bot/telegram_setup.py', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/legacy/python-bot/financial_alert_bot.py b/legacy/python-bot/financial_alert_bot.py[m
+[1mindex b7e9287..9a4f7b6 100644[m
+[1m--- a/legacy/python-bot/financial_alert_bot.py[m
+[1m+++ b/legacy/python-bot/financial_alert_bot.py[m
+[36m@@ -16,7 +16,6 @@[m [mimport requests[m
+ import win32com.client[m
+ from dotenv import load_dotenv[m
+ [m
+[31m-[m
+ LOGGER = logging.getLogger("financial-alert-bot")[m
+ [m
+ # Cells already present in the supplied workbook.[m
+[36m@@ -47,7 +46,6 @@[m [mASSET_CELLS = {[m
+     },[m
+ }[m
+ [m
+[31m-[m
+ @dataclass(frozen=True)[m
+ class AssetSnapshot:[m
+     status: str[m
+[36m@@ -57,7 +55,6 @@[m [mclass AssetSnapshot:[m
+     daily_change: float | None[m
+     unit: str[m
+ [m
+[31m-[m
+ def _as_float(value: Any) -> float | None:[m
+     if value is None or value == "":[m
+         return None[m
+[36m@@ -66,14 +63,12 @@[m [mdef _as_float(value: Any) -> float | None:[m
+     except (TypeError, ValueError):[m
+         return None[m
+ [m
+[31m-[m
+ def _normalize_status(value: Any) -> str:[m
+     if value is None:[m
+         return "UNKNOWN"[m
+     text = str(value).strip().upper()[m
+     return text or "UNKNOWN"[m
+ [m
+[31m-[m
+ class ExcelSignalReader:[m
+     """Open the macro-enabled workbook in an isolated Excel instance."""[m
+ [m
+[36m@@ -136,7 +131,6 @@[m [mclass ExcelSignalReader:[m
+ [m
+         LOGGER.info("Refreshing Excel queries...")[m
+ [m
+[31m-        # Start Power Query / workbook refresh.[m
+         self.workbook.RefreshAll()[m
+ [m
+         # For this workbook, manual Refresh All completes normally.[m
+[36m@@ -196,7 +190,6 @@[m [mclass ExcelSignalReader:[m
+ [m
+         return snapshots, workbook_timestamp[m
+ [m
+[31m-[m
+ def send_telegram_message(token: str, chat_id: str, text: str) -> None:[m
+     url = f"https://api.telegram.org/bot{token}/sendMessage"[m
+     response = requests.post([m
+[36m@@ -213,7 +206,6 @@[m [mdef send_telegram_message(token: str, chat_id: str, text: str) -> None:[m
+     if not payload.get("ok", False):[m
+         raise RuntimeError(f"Telegram API returned an error: {payload}")[m
+ [m
+[31m-[m
+ def load_state(path: Path) -> dict[str, dict[str, Any]]:[m
+     if not path.exists():[m
+         return {}[m
+[36m@@ -224,32 +216,27 @@[m [mdef load_state(path: Path) -> dict[str, dict[str, Any]]:[m
+         LOGGER.warning("Could not read state file; treating this as first run.")[m
+         return {}[m
+ [m
+[31m-[m
+ def save_state(path: Path, snapshots: dict[str, AssetSnapshot]) -> None:[m
+     payload = {name: asdict(snapshot) for name, snapshot in snapshots.items()}[m
+     tmp = path.with_suffix(path.suffix + ".tmp")[m
+     tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")[m
+     tmp.replace(path)[m
+ [m
+[31m-[m
+ def fmt_number(value: float | None, digits: int = 4) -> str:[m
+     if value is None:[m
+         return "n/a"[m
+     return f"{value:,.{digits}f}".rstrip("0").rstrip(".")[m
+ [m
+[31m-[m
+ def fmt_pct(value: float | None) -> str:[m
+     if value is None:[m
+         return "n/a"[m
+     return f"{value * 100:+.2f}%"[m
+ [m
+[31m-[m
+ def fmt_workbook_time(value: Any) -> str:[m
+     if isinstance(value, datetime):[m
+         return value.strftime("%Y-%m-%d %H:%M:%S")[m
+     return str(value) if value not in (None, "") else "unknown"[m
+ [m
+[31m-[m
+ def asset_line(asset: str, snap: AssetSnapshot) -> str:[m
+     return ([m
+         f"{asset}: {snap.status} | "[m
+[36m@@ -257,7 +244,6 @@[m [mdef asset_line(asset: str, snap: AssetSnapshot) -> str:[m
+         f"spread {fmt_pct(snap.spread)} | daily {fmt_pct(snap.daily_change)}"[m
+     )[m
+ [m
+[31m-[m
+ def startup_message(snapshots: dict[str, AssetSnapshot], workbook_time: Any) -> str:[m
+     lines = [[m
+         "Financial alert bot started.",[m
+[36m@@ -267,7 +253,6 @@[m [mdef startup_message(snapshots: dict[str, AssetSnapshot], workbook_time: Any) ->[m
+     lines.extend(asset_line(asset, snap) for asset, snap in snapshots.items())[m
+     return "\n".join(lines)[m
+ [m
+[31m-[m
+ def change_message([m
+     changed_assets: list[tuple[str, str, AssetSnapshot]],[m
+     workbook_time: Any,[m
+[36m@@ -287,7 +272,6 @@[m [mdef change_message([m
+         )[m
+     return "\n".join(lines)[m
+ [m
+[31m-[m
+ def detect_changes([m
+     previous: dict[str, dict[str, Any]],[m
+     current: dict[str, AssetSnapshot],[m
+[36m@@ -299,7 +283,6 @@[m [mdef detect_changes([m
+             changed.append((asset, old_status, snapshot))[m
+     return changed[m
+ [m
+[31m-[m
+ def run_once([m
+     workbook_path: Path,[m
+     token: str,[m
+[36m@@ -335,14 +318,12 @@[m [mdef run_once([m
+     # consume an alert.[m
+     save_state(state_path, snapshots)[m
+ [m
+[31m-[m
+ def get_required_env(name: str) -> str:[m
+     value = os.getenv(name, "").strip()[m
+     if not value:[m
+         raise RuntimeError(f"Missing required environment variable: {name}")[m
+     return value[m
+ [m
+[31m-[m
+ def main() -> int:[m
+     load_dotenv()[m
+ [m
+[36m@@ -442,6 +423,5 @@[m [mdef main() -> int:[m
+ [m
+         time.sleep(max(interval, 30))[m
+ [m
+[31m-[m
+ if __name__ == "__main__":[m
+     raise SystemExit(main())[m
+[1mdiff --git a/legacy/python-bot/telegram_setup.py b/legacy/python-bot/telegram_setup.py[m
+[1mindex 10cf6bf..5345bf7 100644[m
+[1m--- a/legacy/python-bot/telegram_setup.py[m
+[1m+++ b/legacy/python-bot/telegram_setup.py[m
+[36m@@ -1,7 +1,6 @@[m
+ from __future__ import annotations[m
+ [m
+ import os[m
+[31m-import sys[m
+ [m
+ import requests[m
+ from dotenv import load_dotenv[m
