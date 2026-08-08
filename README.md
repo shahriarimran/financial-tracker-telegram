@@ -1,4 +1,4 @@
-# Low-Frequency, Long-Term Financial Tracker Telegram Alerts for Forex and Precious Metals
+# Low-Frequency Financial Tracker & Telegram Alerts for FX and Precious Metals
 
 A Windows desktop-Excel tracker that refreshes market data, calculates Gold, Silver, and USD signals, records the Daily Log, and sends Telegram notifications from workbook VBA.
 
