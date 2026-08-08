@@ -34,4 +34,4 @@ Use a trusted local workbook location and review macro source before enabling ma
 
 ## Limitations
 
-Excel automation requires an interactive desktop Office installation. Data availability, Power Query sources, Telegram availability, and macro security policies can affect runs. No cloud service, Python runtime, or automatic trading is included.
+Excel automation requires an interactive desktop Office installation. Data availability, Power Query sources, Telegram availability, and macro security policies can affect runs. No cloud service, Python runtime, or automatic trading is included. 
