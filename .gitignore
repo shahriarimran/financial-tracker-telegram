@@ -1,0 +1,25 @@
+# Local configuration and credentials
+.env
+config/config.ini
+
+# Python (legacy only)
+.venv/
+venv/
+**/__pycache__/
+*.pyc
+
+# Runtime data and logs
+signal_state.json
+*.log
+*.tmp
+*.bak
+backups/
+
+# Office temporary files
+~$*.xls*
+
+# Windows and IDE files
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
